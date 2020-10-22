@@ -1,0 +1,27 @@
+#!/bin/bash
+
+welcome_osx(){
+    userinfo=`whoami`
+    hostinfo=`hostname`
+    userinfo=${userinfo}"@"${hostinfo}
+    echo -e "\033[31m "User: \ \ \ \ \ \ \ \ \ \ \ \ "${userinfo} \033[0m"
+
+    osname=`sw_vers|head -n 1|awk -F " " '{for (i=2;i<=NF;i++)printf("%s ", $i);print ""}'`
+    osver=`sw_vers|grep ProductVersion |awk -F " " '{for (i=2;i<=NF;i++)printf("%s ", $i);print ""}'`
+    osinfo=${osname}${osver}
+    echo -e "\033[36m "Operating System: "${osinfo} \033[0m"
+    cpuinfo=`sysctl -n machdep.cpu.brand_string`
+    echo -e "\033[33m "CPU: \ \ \ \ \ \ \ \ \ \ \ \ \ "${cpuinfo} \033[0m"
+    #meminfo="16GB"
+    meminfo=`top -l 1 | head -n 10 | grep PhysMe`
+    echo -e "\033[34m "MEMORY: \ \ \ \ \ \ \ \ \ \ "${meminfo} \033[0m"
+    gpuinfofull=`system_profiler SPDisplaysDataType | grep 'Chipset Model:\|VRAM (Total)'`
+    gpuinfo1=`echo $gpuinfofull | grep Chip | sed -n '1p' | awk -F ":" '{print$2}'`
+    gpuinfo2=`echo $gpuinfofull | grep Chip | sed -n '2p' | awk -F ":" '{print$2}'`
+    gpuinfo3=`echo $gpuinfofull | grep VRAM | awk -F ":" '{print $2}'`
+    gpuinfo=${gpuinfo1}\ \ \&\ ${gpuinfo2}${gpuinfo3}
+    echo -e "\033[32m "GPU: \ \ \ \ \ \ \ \ \ \ \  "${gpuinfo} \033[0m"
+}
+
+alias wel='welcome_osx'
+
